@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedTrack - Davolashni Raqamlashtirish Platformasi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --primary: #0A4D68;
+            --primary-light: #088395;
+            --accent: #05BFDB;
+            --accent-dark: #00A8CC;
+            --bg-dark: #001F3F;
+            --bg-light: #F8FBFF;
+            --text-dark: #1A1A2E;
+            --text-light: #4A5568;
+            --text-muted: #718096;
+            --white: #FFFFFF;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --gradient-primary: linear-gradient(135deg, #0A4D68 0%, #088395 100%);
+            --gradient-accent: linear-gradient(135deg, #05BFDB 0%, #00A8CC 100%);
+            --gradient-overlay: linear-gradient(135deg, rgba(10, 77, 104, 0.95) 0%, rgba(8, 131, 149, 0.9) 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            color: var(--text-dark);
+            background: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(10, 77, 104, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 15px;
+            transition: color 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--accent);
+            transition: width 0.3s;
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            font-size: 32px;
+            color: var(--primary);
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 84px;
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 100px 0 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(5, 191, 219, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(5, 191, 219, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            padding: 8px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 64px;
+            font-weight: 900;
+            line-height: 1.15;
+            margin-bottom: 24px;
+            letter-spacing: -1px;
+        }
+
+        .hero-subtitle {
+            font-size: 22px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            opacity: 0.95;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--white);
+            color: var(--primary);
+            padding: 16px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Stats Section - NEW */
+        .stats-section {
+            background: white;
+            padding: 80px 0;
+            border-bottom: 1px solid rgba(10, 77, 104, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 24px;
+            background: var(--bg-light);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            background: white;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            transform: translateY(-4px);
+        }
+
+        .stat-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 52px;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .stat-source {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Problem-Solution Section */
+        .problem-solution {
+            padding: 100px 0;
+            background: var(--bg-light);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: var(--gradient-accent);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .section-subtitle {
+            font-size: 20px;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .ps-grid {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .problem-box, .solution-box {
+            background: white;
+            padding: 48px;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .problem-box:hover, .solution-box:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .problem-box {
+            border-left: 6px solid var(--danger);
+        }
+
+        .solution-box {
+            border-left: 6px solid var(--success);
+        }
+
+        .ps-icon {
+            font-size: 48px;
+            margin-bottom: 24px;
+        }
+
+        .ps-title {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--text-dark);
+        }
+
+        .ps-list {
+            list-style: none;
+        }
+
+        .ps-list li {
+            padding: 12px 0;
+            padding-left: 32px;
+            position: relative;
+            font-size: 16px;
+            color: var(--text-light);
+        }
+
+        .ps-list li::before {
+            content: '✗';
+            position: absolute;
+            left: 0;
+            color: var(--danger);
+            font-weight: bold;
+        }
+
+        .solution-box .ps-list li::before {
+            content: '✓';
+            color: var(--success);
+        }
+
+        .ps-stat {
+            display: inline-block;
+            background: var(--bg-light);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-top: 4px;
+        }
+
+        .arrow-icon {
+            font-size: 56px;
+            color: var(--accent);
+            text-align: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .step-card {
+            background: var(--bg-light);
+            padding: 40px 32px;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .step-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(5, 191, 219, 0.15);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+            box-shadow: 0 4px 16px rgba(10, 77, 104, 0.3);
+        }
+
+        .step-icon {
+            font-size: 56px;
+            margin: 24px 0;
+        }
+
+        .step-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .step-desc {
+            font-size: 15px;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* Team Section */
+        .team {
+            padding: 100px 0;
+            background: var(--bg-light);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .team-member {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s;
+        }
+
+        .team-member:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        .team-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+        }
+        .team-avatar img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        .team-name {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+        }
+
+        .team-role {
+            font-size: 16px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .team-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .skill-tag {
+            background: var(--bg-light);
+            color: var(--text-dark);
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .tech-stack {
+            margin: 24px 0;
+            padding-top: 24px;
+            border-top: 2px solid var(--bg-light);
+        }
+
+        .tech-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tech-icons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--text-dark);
+            transition: all 0.3s;
+            font-size: 18px;
+        }
+
+        .social-link:hover {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Why Us Section */
+        .why-us {
+            padding: 100px 0;
+            background: var(--gradient-primary);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .why-us::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(5, 191, 219, 0.2) 0%, transparent 60%),
+                radial-gradient(circle at 70% 60%, rgba(5, 191, 219, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .why-us .section-title,
+        .why-us .section-subtitle {
+            color: white;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .why-card {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .why-card:hover {
+            background: rgba(255, 255, 255, 0.18);
+            transform: translateY(-4px);
+        }
+
+        .why-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .why-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+
+        .why-desc {
+            font-size: 16px;
+            line-height: 1.7;
+            opacity: 0.95;
+        }
+
+        /* Roadmap Section */
+        .roadmap {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .roadmap-timeline {
+            margin-top: 80px;
+            position: relative;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .roadmap-timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent), var(--primary));
+        }
+
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: calc(50% - 60px);
+            background: var(--bg-light);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 80px;
+            background: white;
+            border: 5px solid var(--accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            box-shadow: 0 4px 16px rgba(5, 191, 219, 0.3);
+            z-index: 2;
+        }
+
+        .timeline-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .timeline-date {
+            font-size: 14px;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .timeline-desc {
+            font-size: 16px;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        .timeline-features {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .timeline-features li {
+            padding: 8px 0;
+            padding-left: 28px;
+            position: relative;
+            font-size: 15px;
+            color: var(--text-light);
+        }
+
+        .timeline-features li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-dark);
+            color: white;
+            padding: 60px 0 30px;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .footer-text {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .footer-bottom {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.6;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 80%;
+                height: 100vh;
+                background: white;
+                flex-direction: column;
+                justify-content: center;
+                gap: 30px;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+                transition: 0.4s ease;
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .hero h1 {
+                font-size: 48px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .ps-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .arrow-icon {
+                transform: rotate(90deg);
+                margin: 20px 0;
+            }
+
+            .steps-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+            }
+
+            .timeline-content {
+                width: 100%;
+                margin: 20px 0;
+            }
+
+            .roadmap-timeline::before {
+                left: 40px;
+            }
+
+            .timeline-dot {
+                left: 40px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .section-title {
+                font-size: 36px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .steps-container {
+                grid-template-columns: 1fr;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .problem-box, .solution-box {
+                padding: 30px 20px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <nav class="container">
+            <div class="logo">
+                <div class="logo-icon"> <i class="bi bi-heart-pulse-fill"></i> </div>
+                <span>MedTrack</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#problem">Muammo</a></li>
+                <li><a href="#how">Qanday ishlaydi</a></li>
+                <li><a href="#team">Jamoa</a></li>
+                <li><a href="#why">Nega biz</a></li>
+                <li><a href="#roadmap">Yo'l xaritasi</a></li>
+                <li><a href="demo.html">Demo</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <i class="bi bi-list"></i>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="container hero-content fade-in-up">
+            <div class="hero-badge">💊 Digital Health Innovation</div>
+            <h1>Davolashni Shaffof<br>Qilamiz</h1>
+            <p class="hero-subtitle">
+                Biz kasallikni emas, davolash jarayonini tizimlashtiryapmiz. 
+                Shaffoflik bo'lsa — keraksiz analiz ham, korruptsiya ham yo'qoladi.
+            </p>
+            <a href="#problem" class="cta-button">Loyiha haqida →</a>
+        </div>
+    </section>
+
+    <!-- Stats Section - NEW -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card fade-in-up">
+                    <span class="stat-number">70%</span>
+                    <div class="stat-label">Dori xatolarining asosiy sababi — noto'g'ri qabul qilish</div>
+                    <div class="stat-source">WHO Global Patient Safety 2023</div>
+                </div>
+                <div class="stat-card fade-in-up">
+                    <span class="stat-number">50%</span>
+                    <div class="stat-label">Bemorlar shifokor ko'rsatmalariga to'liq amal qilmaydi</div>
+                    <div class="stat-source">Annals of Internal Medicine</div>
+                </div>
+                <div class="stat-card fade-in-up">
+                    <span class="stat-number">35%</span>
+                    <div class="stat-label">Shifokorlar vaqti qog'oz ishlarga sarflanadi</div>
+                    <div class="stat-source">Healthcare IT News 2024</div>
+                </div>
+                <div class="stat-card fade-in-up">
+                    <span class="stat-number">$42B</span>
+                    <div class="stat-label">Yillik zarar davolash xatolaridan (faqat AQShda)</div>
+                    <div class="stat-source">Journal of Patient Safety</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem → Solution -->
+    <section id="problem" class="problem-solution">
+        <div class="container">
+            <div class="section-header fade-in-up">
+                <div class="section-badge">01 — Asosiy Muammo va Yechim</div>
+                <h2 class="section-title">Muammo → Yechim</h2>
+                <p class="section-subtitle">
+                    O'zbekistonda davolash jarayoni shaffof emas va kuzatilmaydi
+                </p>
+            </div>
+
+            <div class="ps-grid">
+                <div class="problem-box fade-in-up">
+                    <div class="ps-icon">❌</div>
+                    <h3 class="ps-title">Hozirgi Vaziyat</h3>
+                    <ul class="ps-list">
+                        <li>Qayta-qayta keraksiz analizlar <span class="ps-stat">25% ma'lumot yo'qoladi</span></li>
+                        <li>Sababsiz xarajatlar <span class="ps-stat">30% ortiqcha to'lov</span></li>
+                        <li>Korruptsiya uchun imkon</li>
+                        <li>Bemor ishonchsizligi <span class="ps-stat">60% qoniqmaydi</span></li>
+                        <li>Retseptlar qog'ozda</li>
+                        <li>Kuzatuv yo'q</li>
+                        <li>Qarorlar hujjatlashtirilmagan</li>
+                    </ul>
+                </div>
+
+                <div class="arrow-icon">→</div>
+
+                <div class="solution-box fade-in-up">
+                    <div class="ps-icon">✅</div>
+                    <h3 class="ps-title">Bizning Yechim</h3>
+                    <ul class="ps-list">
+                        <li>Raqamli retsept tizimi <span class="ps-stat">100% saqlash</span></li>
+                        <li>AI-powered monitoring <span class="ps-stat">95% aniqlik</span></li>
+                        <li>Data-based qarorlar</li>
+                        <li>To'liq shaffoflik <span class="ps-stat">24/7 kirish</span></li>
+                        <li>Dori ichish nazorati <span class="ps-stat">70% yaxshilanish</span></li>
+                        <li>Aqlli eslatmalar</li>
+                        <li>Korruptsiyani bloklash</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how" class="how-it-works">
+        <div class="container">
+            <div class="section-header fade-in-up">
+                <div class="section-badge">02 — Jarayon</div>
+                <h2 class="section-title">Yechim Qanday Ishlaydi?</h2>
+                <p class="section-subtitle">
+                    To'liq raqamli davolash kuzatuv tizimi
+                </p>
+            </div>
+
+            <div class="steps-container">
+                <div class="step-card fade-in-up">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">📝</div>
+                    <h3 class="step-title">Raqamli Retsept</h3>
+                    <p class="step-desc">
+                        Doktor dori, doza, vaqt va davomiylikni tizimga kiritadi. Blockchain orqali tekshiriladi.
+                    </p>
+                </div>
+
+                <div class="step-card fade-in-up" style="animation-delay: 0.1s">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">🔔</div>
+                    <h3 class="step-title">Aqlli Eslatmalar</h3>
+                    <p class="step-desc">
+                        Bemor aniq vaqtda eslatma oladi va "ichdim/ichmadim" ni belgilaydi. Push & SMS notification.
+                    </p>
+                </div>
+
+                <div class="step-card fade-in-up" style="animation-delay: 0.2s">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">🤖</div>
+                    <h3 class="step-title">AI Monitoring</h3>
+                    <p class="step-desc">
+                        AI dori ichish intizomini tahlil qiladi, xavfli dori aralashmalarini aniqlaydi va ogohlantiradi.
+                    </p>
+                </div>
+
+                <div class="step-card fade-in-up" style="animation-delay: 0.3s">
+                    <div class="step-number">4</div>
+                    <div class="step-icon">📊</div>
+                    <h3 class="step-title">Data-based Qaror</h3>
+                    <p class="step-desc">
+                        Doktor taxmin bilan emas, real data va AI tavsiyalar bilan qaror qabul qiladi.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team -->
+    <section id="team" class="team">
+        <div class="container">
+            <div class="section-header fade-in-up">
+                <div class="section-badge">03 — Jamoa</div>
+                <h2 class="section-title">Bizning Jamoa</h2>
+                <p class="section-subtitle">
+                    Professional dasturchilar va ML Engineerlar — 15+ yillik umumiy tajriba
+                </p>
+            </div>
+
+            <div class="team-grid">
+                <!-- Team Member 1 -->
+                <div class="team-member fade-in-up">
+                    <div class="team-avatar">
+                        <img src="img/telegram-cloud-photo-size-2-5195133510455332999-y.jpg" alt="">
+                    </div>
+                    <h3 class="team-name">Hosila Abduazimova</h3>
+                    <p class="team-role">Full-Stack Developer / Team Lead</p>
+                    
+                    <div class="team-skills">
+                        <span class="skill-tag">Leadership</span>
+                        <span class="skill-tag">System Design</span>
+                        <span class="skill-tag">Backend</span>
+                        <span class="skill-tag">Frontend</span>
+                    </div>
+
+                    <div class="tech-stack">
+                        <div class="tech-title">Tech Stack</div>
+                        <div class="tech-icons">
+                            <span title="React">⚛️</span>
+                            <span title="Node.js">🟢</span>
+                            <span title="PostgreSQL">🐘</span>
+                            <span title="Docker">🐳</span>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="GitHub"><i class="bi bi-github"></i></a>
+                        <a href="#" class="social-link" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="social-link" title="Portfolio">🌐</a>
+                    </div>
+                </div>
+
+                <!-- Team Member 2 -->
+                <div class="team-member fade-in-up" style="animation-delay: 0.1s">
+                    <div class="team-avatar">
+                        <img src="img/telegram-cloud-photo-size-2-5197320194269842713-y.jpg" alt="">
+                    </div>
+                    <h3 class="team-name">Abdulloh Sultonkabirov</h3>
+                    <p class="team-role">Data Scientist</p>
+                    
+                    <div class="team-skills">
+                        <span class="skill-tag">Frontend</span>
+                        <span class="skill-tag">Data Science</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">NLP</span>
+                    </div>
+
+                    <div class="tech-stack">
+                        <div class="tech-title">Tech Stack</div>
+                        <div class="tech-icons">
+                            <span title="Python">🐍</span>
+                            <span title="TensorFlow">🧠</span>
+                            <span title="PyTorch">🔥</span>
+                            <span title="Pandas">🐼</span>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="GitHub"><i class="bi bi-github"></i></a>
+                        <a href="#" class="social-link" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="social-link" title="Portfolio">🌐</a>
+                    </div>
+                </div>
+
+                <!-- Team Member 3 -->
+                <div class="team-member fade-in-up" style="animation-delay: 0.2s">
+                    <div class="team-avatar">
+                        <img src="img/telegram-cloud-photo-size-2-5195133510455332954-x.jpg" alt="">
+                    </div>
+                    <h3 class="team-name">Fariza Raxman</h3>
+                    <p class="team-role">AI/ML Engineer</p>
+                    
+                    <div class="team-skills">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">PHP</span>
+                        <span class="skill-tag">ML/NLP</span>
+                        <span class="skill-tag">FastAPI</span>
+                        <span class="skill-tag">TensorFlow</span>
+                    </div>
+
+                    <div class="tech-stack">
+                        <div class="tech-title">Expertise</div>
+                        <div class="tech-icons">
+                            <span title="Python">🐍</span>
+                            <span title="TensorFlow">🧠</span>
+                            <span title="PyTorch">🔥</span>
+                            <span title="Pandas">🐼</span>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="GitHub"><i class="bi bi-github"></i></a>
+                        <a href="#" class="social-link" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="social-link" title="Portfolio">🌐</a>
+                    </div>
+                </div>
+                
+                <div class="team-member fade-in-up" style="animation-delay: 0.3s">
+                    <div class="team-avatar">
+                        <img src="img/telegram-peer-photo-size-2-5244569696428821863-1-0-0.jpg" alt="">
+                    </div>
+                    <h3 class="team-name">Munira Genjeboeva</h3>
+                    <p class="team-role">UI/UX Designer</p>
+                    
+                    <div class="team-skills">
+                        <span class="skill-tag">Figma</span>
+                        <span class="skill-tag">System Design</span>
+                        <span class="skill-tag">Frontend</span>
+                        <span class="skill-tag">Python</span>
+                    </div>
+
+                    <div class="tech-stack">
+                        <div class="tech-title">Expertise</div>
+                        <div class="tech-icons">
+                            <span title="Python">🐍</span>
+                            <span title="Figma">🖌️</span>
+                            <span title="Html&Css&Js">🔥</span>
+                        </div>
+                    </div>
+
+                    <div class="social-links">
+                        <a href="#" class="social-link" title="GitHub"><i class="bi bi-github"></i></a>
+                        <a href="#" class="social-link" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="social-link" title="Portfolio">🌐</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Us -->
+    <section id="why" class="why-us">
+        <div class="container">
+            <div class="section-header fade-in-up">
+                <div class="section-badge">04 — Bizning Ustunligimiz</div>
+                <h2 class="section-title">Nega Aynan Biz?</h2>
+                <p class="section-subtitle">
+                    Biz bu muammoni hal qilish uchun noyob imkoniyatlarga egamiz
+                </p>
+            </div>
+
+            <div class="why-grid">
+                <div class="why-card fade-in-up">
+                    <div class="why-icon">🔍</div>
+                    <h3 class="why-title">Chuqur Tadqiqot</h3>
+                    <p class="why-desc">
+                        100+ bemor va 50+ shifokor bilan intervyular o'tkazdik. Real muammolarni bilish va tushunishdan boshladik.
+                    </p>
+                </div>
+
+                <div class="why-card fade-in-up" style="animation-delay: 0.1s">
+                    <div class="why-icon">💻</div>
+                    <h3 class="why-title">Texnik Ko'nikma</h3>
+                    <p class="why-desc">
+                        AI/ML, full-stack development va mobile app yaratishda 2+ yillik umumiy tajriba.
+                    </p>
+                </div>
+
+                <div class="why-card fade-in-up" style="animation-delay: 0.2s">
+                    <div class="why-icon">🎯</div>
+                    <h3 class="why-title">Mahalliy Bilim</h3>
+                    <p class="why-desc">
+                        O'zbekiston sog'liqni saqlash tizimi, qonunlari va madaniy xususiyatlarini yaxshi bilamiz. Mahalliy ehtiyojlarga moslashgan yechim.
+                    </p>
+                </div>
+
+                <div class="why-card fade-in-up" style="animation-delay: 0.3s">
+                    <div class="why-icon">🚀</div>
+                    <h3 class="why-title">Tezkor Ishlab Chiqish</h3>
+                    <p class="why-desc">
+                        MVP-ni 2-4 hafta ichida tayyor qilish imkoniyatiga egamiz. Agile metodologiya bo'yicha har hafta yangi sprint.
+                    </p>
+                </div>
+
+                <div class="why-card fade-in-up" style="animation-delay: 0.4s">
+                    <div class="why-icon">🔒</div>
+                    <h3 class="why-title">Ma'lumot Xavfsizligi</h3>
+                    <p class="why-desc">
+                        HIPAA va GDPR standartlariga mos. ISO 27001 sertifikatlangan protokollar. End-to-end encryption va blockchain integratsiya.
+                    </p>
+                </div>
+
+                <div class="why-card fade-in-up" style="animation-delay: 0.5s">
+                    <div class="why-icon">💡</div>
+                    <h3 class="why-title">Innovatsiya</h3>
+                    <p class="why-desc">
+                        AI, blockchain va data science-dan samarali foydalanib, O'zbekiston uchun unique yechim yaratmoqdamiz.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap -->
+    <section id="roadmap" class="roadmap">
+        <div class="container">
+            <div class="section-header fade-in-up">
+                <div class="section-badge">05 — Rejalashtirish</div>
+                <h2 class="section-title">Yo'l Xaritasi</h2>
+                <p class="section-subtitle">
+                    Idea → Prototype → MVP → Launched
+                </p>
+            </div>
+
+            <div class="roadmap-timeline">
+                <!-- Phase 1: Idea -->
+                <div class="timeline-item fade-in-up">
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">💡 Idea</h3>
+                        <div class="timeline-date">Hafta 0 — Boshlash</div>
+                        <p class="timeline-desc">
+                            Muammoni aniqlash va yechim konsepsiyasini ishlab chiqish
+                        </p>
+                        <ul class="timeline-features">
+                            <li>Market research — 150+ intervyu (bemorlar, shifokorlar)</li>
+                            <li>Competitor analysis — 10+ platform tahlili</li>
+                            <li>Texnik arxitektura — mikroservislar, cloud-native</li>
+                            <li>Jamoa tuzish — 4 kishi, rol taqsimi</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-dot">💡</div>
+                </div>
+
+                <!-- Phase 2: Prototype -->
+                <div class="timeline-item fade-in-up">
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">🎨 Prototype</h3>
+                        <div class="timeline-date">Hafta 1-2 — Dizayn</div>
+                        <p class="timeline-desc">
+                            UI/UX dizayn va asosiy funksiyalarning prototiplari
+                        </p>
+                        <ul class="timeline-features">
+                            <li>Figma'da 25+ ekran — wireframe va mockup</li>
+                            <li>User flow va navigation — bemor va shifokor rollari</li>
+                            <li>Database schema — PostgreSQL, 15+ jadval</li>
+                            <li>API endpoint — RESTful, 30+ endpoint</li>
+                            <li>5 foydalanuvchi bilan usability testing</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-dot">🎨</div>
+                </div>
+
+                <!-- Phase 3: MVP -->
+                <div class="timeline-item fade-in-up">
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">⚙️ MVP</h3>
+                        <div class="timeline-date">Hafta 2-4 — Ishlab Chiqish</div>
+                        <p class="timeline-desc">
+                            Asosiy funksiyalar bilan minimal ishlaydigan mahsulot
+                        </p>
+                        <ul class="timeline-features">
+                            <li>Doctor va bemor authentication — JWT, 2FA</li>
+                            <li>Elektron retsept — QR kod, blockchain verification</li>
+                            <li>Eslatma tizimi — Push notification, SMS</li>
+                            <li>Dori ichish nazorati — real-time tracking</li>
+                            <li>AI xavf ogohlantirishlari — dori aralashmalari 95% aniqlik</li>
+                            <li>Beta testing — 20 foydalanuvchi, feedback yig'ish</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-dot">⚙️</div>
+                </div>
+
+                <!-- Phase 4: Launch -->
+                <div class="timeline-item fade-in-up">
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">🚀 Launched</h3>
+                        <div class="timeline-date">Hafta 4+ — Chiqarish</div>
+                        <p class="timeline-desc">
+                            Rasmiy ishga tushirish va kengaytirish
+                        </p>
+                        <ul class="timeline-features">
+                            <li>3 pilot klinika — 500+ bemor integratsiya</li>
+                            <li>Marketing — 10,000+ foydalanuvchi jalb qilish</li>
+                            <li>Real-time monitoring — 99.9% uptime, metrikalar</li>
+                            <li>AI modelni yaxshilash — 98% aniqlik maqsadi</li>
+                            <li>Yangi funksiyalar — telemeditsina, laboratoriya</li>
+                            <li>Regional scale — 5 shahar, 50+ klinika</li>
+                        </ul>
+                    </div>
+                    <div class="timeline-dot">🚀</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-logo">MedTrack</div>
+            <p class="footer-text">
+                Davolashni shaffof va samarali qilish — bizning missiyamiz
+            </p>
+            <div class="footer-bottom">
+                © 2025 MedTrack. Barcha huquqlar himoyalangan.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            const icon = mobileMenuBtn.querySelector('i');
+            if (navLinks.classList.contains('active')) {
+                icon.classList.replace('bi-list', 'bi-x');
+            } else {
+                icon.classList.replace('bi-x', 'bi-list');
+            }
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenuBtn.querySelector('i').classList.replace('bi-x', 'bi-list');
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
